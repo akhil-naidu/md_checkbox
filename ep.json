@@ -1,0 +1,21 @@
+{
+  "parts":[
+    {
+      "name": "tasklist",
+      "client_hooks": {
+        "aceEditorCSS": "md_checkbox/static/js/tasklist",
+        "aceDomLineProcessLineAttributes": "md_checkbox/static/js/tasklist",
+        "postAceInit": "md_checkbox/static/js/tasklist",
+        "aceInitialized": "md_checkbox/static/js/tasklist",
+        "collectContentPre": "md_checkbox/static/js/shared",
+        "aceAttribsToClasses": "md_checkbox/static/js/tasklist"
+      },
+      "hooks": {
+        "eejsBlock_scripts": "md_checkbox/tasklist",
+        "eejsBlock_styles": "md_checkbox/tasklist",
+        "collectContentPre": "md_checkbox/static/js/shared",
+        "collectContentPost": "md_checkbox/static/js/shared"
+      }
+    }
+  ]
+}

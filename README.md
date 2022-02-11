@@ -1,0 +1,1 @@
+Checkbox plugin for MuDoc
