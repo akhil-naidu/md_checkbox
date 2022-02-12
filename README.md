@@ -1,4 +1,1 @@
-Tasks list in Etherpad
-======================
-
-Simple task / todo lists in Etherpad.
+Checkbox plugin for MuDoc
