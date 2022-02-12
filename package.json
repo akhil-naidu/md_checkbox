@@ -1,20 +1,48 @@
 {
+  "_from": "ep_tasklist",
+  "_id": "ep_tasklist@0.0.13",
+  "_inBundle": false,
+  "_integrity": "sha512-Ss9LnUa7uQJjwd6DS2kVnPYRpisefy6DDlC0ZtmKh7P8PhhmME5Cofbote9Bvx6GHWxo25MVPgBM4tZQ3Jkj2Q==",
+  "_location": "/ep_tasklist",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "ep_tasklist",
+    "name": "ep_tasklist",
+    "escapedName": "ep_tasklist",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER"
+  ],
+  "_resolved": "https://registry.npmjs.org/ep_tasklist/-/ep_tasklist-0.0.13.tgz",
+  "_shasum": "48e85343b56247352028586df63e25880c4b8d55",
+  "_spec": "ep_tasklist",
+  "_where": "C:\\Users\\Ahyaan\\Desktop\\New folder (2)\\etherpad_page",
   "author": {
-    "name": "Aman",
-    "email": "sherawataman05@gmail.com"
+    "name": "John McLear",
+    "email": "john@mclear.co.uk",
+    "url": "http://mclear.co.uk"
+  },
+  "bugs": {
+    "url": "https://github.com/johnmclear/ep_tasklist/issues"
   },
   "bundleDependencies": false,
   "contributors": [],
   "dependencies": {},
-  "description": "Checkbox  Plugin for Mudoc",
+  "deprecated": "no longer maintained",
+  "description": "Task list in Etherpad",
   "engines": {
     "node": "*"
   },
-  "homepage": "https://github.com/akhil-naidu/md_checkbox#readme",
-  "name": "md_checkbox",
+  "homepage": "https://github.com/johnmclear/ep_tasklist#readme",
+  "name": "ep_tasklist",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/akhil-naidu/md_checkbox.git"
+    "url": "git+https://github.com/johnmclear/ep_tasklist.git"
   },
-  "version": "0.0.1"
+  "version": "0.0.13"
 }
