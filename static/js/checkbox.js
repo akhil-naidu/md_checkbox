@@ -10,10 +10,10 @@ if(typeof exports == 'undefined'){
 
 var underscore = require('md_mudoc-lite/static/js/underscore');
 var padeditor = require('md_mudoc-lite/static/js/pad_editor').padeditor;
-var tags = ['tasklist-not-done', 'tasklist-done'];
+var tags = ['checkbox-not-done', 'checkbox-done'];
 var padEditor;
 
-exports.tasklist = {
+exports.checkbox = {
 
   /***
   *
@@ -22,20 +22,20 @@ exports.tasklist = {
   ***/
 
   init: function(context){ // Write the button to the dom
-    var buttonHTML = '<li class="acl-write" id="tasklist"><a class="grouped-middle" data-l10n-id="pad.toolbar.tasklist.title" title="Task list Checkbox"><span class="buttonicon buttonicon-tasklist"></span></a></li>';
+    var buttonHTML = '<li class="acl-write" id="checkbox"><a class="grouped-middle" data-l10n-id="pad.toolbar.checkbox.title" title="Task list Checkbox"><span class="icon-check"></span></a></li>';
     $(buttonHTML).insertBefore($('.buttonicon-indent').parent().parent());
-    $('#tasklist').click(function(){ // apply attribtes when we click the editbar button
+    $('#checkbox').click(function(){ // apply attribtes when we click the editbar button
 
       context.ace.callWithAce(function(ace){ // call the function to apply the attribute inside ACE
-        ace.ace_doInsertTaskList();
-      }, 'tasklist', true); // TODO what's the second attribute do here?
+        ace.ace_doInsertcheckbox();
+      }, 'checkbox', true); // TODO what's the second attribute do here?
       padeditor.ace.focus();
 
     });
     context.ace.callWithAce(function(ace){
       var doc = ace.ace_getDocument();
-      $(doc).find('#innerdocbody').on("click", underscore(exports.tasklist.doUpdateTaskList).bind(ace));
-    }, 'tasklist', true);
+      $(doc).find('#innerdocbody').on("click", underscore(exports.checkbox.doUpdatecheckbox).bind(ace));
+    }, 'checkbox', true);
   },
 
 
@@ -45,18 +45,18 @@ exports.tasklist = {
   *
   ***/
 
-  doInsertTaskList: function(){
+  doInsertcheckbox: function(){
     var rep = this.rep;
     var documentAttributeManager = this.documentAttributeManager;
     if (!(rep.selStart && rep.selEnd)){ return; } // only continue if we have some caret position
     var firstLine = rep.selStart[0]; // Get the first line
     var lastLine = Math.max(firstLine, rep.selEnd[0] - ((rep.selEnd[1] === 0) ? 1 : 0)); // Get the last line
     underscore(underscore.range(firstLine, lastLine + 1)).each(function(i){ // For each line, either turn on or off task list
-      var istasklist = documentAttributeManager.getAttributeOnLine(i, 'tasklist-not-done');
-      if(!istasklist){ // if its already a tasklist item
-        documentAttributeManager.setAttributeOnLine(i, 'tasklist-not-done', 'tasklist-not-done'); // make the line a task list
+      var ischeckbox = documentAttributeManager.getAttributeOnLine(i, 'checkbox-not-done');
+      if(!ischeckbox){ // if its already a checkbox item
+        documentAttributeManager.setAttributeOnLine(i, 'checkbox-not-done', 'checkbox-not-done'); // make the line a task list
       }else{
-        documentAttributeManager.removeAttributeOnLine(i, 'tasklist-not-done'); // remove the task list from the line
+        documentAttributeManager.removeAttributeOnLine(i, 'checkbox-not-done'); // remove the task list from the line
       }
     });
   },
@@ -68,16 +68,16 @@ exports.tasklist = {
   *
   ***/
 
-  doToggleTaskListItem: function(lineNumber){
+  doTogglecheckboxItem: function(lineNumber){
     var rep = this.rep;
     var documentAttributeManager = this.documentAttributeManager;
-    var isDone = documentAttributeManager.getAttributeOnLine(lineNumber, 'tasklist-done');
+    var isDone = documentAttributeManager.getAttributeOnLine(lineNumber, 'checkbox-done');
     if(isDone){
-      documentAttributeManager.removeAttributeOnLine(lineNumber, 'tasklist-done'); // remove the task list from the line
-      documentAttributeManager.setAttributeOnLine(lineNumber, 'tasklist-not-done', 'tasklist-not-done'); // make it undone
+      documentAttributeManager.removeAttributeOnLine(lineNumber, 'checkbox-done'); // remove the task list from the line
+      documentAttributeManager.setAttributeOnLine(lineNumber, 'checkbox-not-done', 'checkbox-not-done'); // make it undone
     }else{
-      documentAttributeManager.removeAttributeOnLine(lineNumber, 'tasklist-not-done'); // remove the task list from the line
-      documentAttributeManager.setAttributeOnLine(lineNumber, 'tasklist-done', 'tasklist-done'); // make it done
+      documentAttributeManager.removeAttributeOnLine(lineNumber, 'checkbox-not-done'); // remove the task list from the line
+      documentAttributeManager.setAttributeOnLine(lineNumber, 'checkbox-done', 'checkbox-done'); // make it done
     }
 
   },
@@ -89,18 +89,18 @@ exports.tasklist = {
   *
   ***/
 
-  doUpdateTaskList: function(event){ // This is in the wrong context to access doc attr manager
+  doUpdatecheckbox: function(event){ // This is in the wrong context to access doc attr manager
     var ace = this;
     var target = event.target;
-    var isTaskList = ($(target).hasClass("tasklist-not-done") || $(target).hasClass("tasklist-done"));
+    var ischeckbox = ($(target).hasClass("checkbox-not-done") || $(target).hasClass("checkbox-done"));
     var parent = $(target).parent();
     var lineNumber = parent.prevAll().length;
     var targetRight = event.target.offsetLeft + 14; // The right hand side of the checkbox -- remember the checkbox can be indented
     var isCheckbox = (event.pageX < targetRight); // was the click to the left of the checkbox
-    if(!isTaskList || !isCheckbox){ return; } // Dont continue if we're not clicking a checkbox of a tasklist
+    if(!ischeckbox || !isCheckbox){ return; } // Dont continue if we're not clicking a checkbox of a checkbox
     padEditor.callWithAce(function(ace){ // call the function to apply the attribute inside ACE
-      ace.ace_doToggleTaskListItem(lineNumber);
-    }, 'tasklist', true); // TODO what's the second attribute do here?
+      ace.ace_doTogglecheckboxItem(lineNumber);
+    }, 'checkbox', true); // TODO what's the second attribute do here?
   }
 }
 
@@ -113,8 +113,8 @@ exports.tasklist = {
 
 function aceInitialized(hook, context){
   var editorInfo = context.editorInfo;
-  editorInfo.ace_doInsertTaskList = underscore(exports.tasklist.doInsertTaskList).bind(context); // What does underscore do here?
-  editorInfo.ace_doToggleTaskListItem = underscore(exports.tasklist.doToggleTaskListItem).bind(context); // TODO
+  editorInfo.ace_doInsertcheckbox = underscore(exports.checkbox.doInsertcheckbox).bind(context); // What does underscore do here?
+  editorInfo.ace_doTogglecheckboxItem = underscore(exports.checkbox.doTogglecheckboxItem).bind(context); // TODO
   padEditor = context.editorInfo.editor;
 }
 
@@ -125,8 +125,8 @@ function aceInitialized(hook, context){
  * 
  ***/
 var aceDomLineProcessLineAttributes = function(name, context){
-  if( context.cls.indexOf("tasklist-not-done") !== -1) { var type="tasklist-not-done"; }
-  if( context.cls.indexOf("tasklist-done") !== -1)     { var type="tasklist-done";}
+  if( context.cls.indexOf("checkbox-not-done") !== -1) { var type="checkbox-not-done"; }
+  if( context.cls.indexOf("checkbox-done") !== -1)     { var type="checkbox-done";}
   var tagIndex = context.cls.indexOf(type);
   if (tagIndex !== undefined && type){
     var tag = tags[tagIndex];
@@ -146,7 +146,7 @@ var aceDomLineProcessLineAttributes = function(name, context){
  * Turn attributes into classes
  *
  ***/
-exports.aceAttribsToClasses = function(hook, context){if(context.key == 'tasklist-not-done' || context.key == 'tasklist-done'){return [context.value];}}
+exports.aceAttribsToClasses = function(hook, context){if(context.key == 'checkbox-not-done' || context.key == 'checkbox-done'){return [context.value];}}
 
 
 /***
@@ -156,7 +156,7 @@ exports.aceAttribsToClasses = function(hook, context){if(context.key == 'tasklis
  ***/
 exports.aceInitialized = aceInitialized;
 exports.aceDomLineProcessLineAttributes = aceDomLineProcessLineAttributes;
-exports.aceEditorCSS = function(hook_name, cb){return ["/md_checkbox/static/css/tasklist.css"];} // inner pad CSS
-exports.postAceInit = function(hook, context){exports.tasklist.init(context);
+exports.aceEditorCSS = function(hook_name, cb){return ["/ep_checkbox/static/css/checkbox.css"];} // inner pad CSS
+exports.postAceInit = function(hook, context){exports.checkbox.init(context);
 
 }
