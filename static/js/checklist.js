@@ -1,8 +1,3 @@
-/*** 
-*
-* Most of the logic for task lists are done here
-*
-*/
 
 if(typeof exports == 'undefined'){
   var exports = this['mymodule'] = {};
@@ -14,12 +9,6 @@ var tags = ['checklist-not-done', 'checklist-done'];
 var padEditor;
 
 exports.checklist = {
-
-  /***
-  *
-  *  Add button to the editbar and bind a listener
-  *
-  ***/
 
   init: function(context){ // Write the button to the dom
     var buttonHTML = '<li class="acl-write" id="checklist"><a class="grouped-middle" data-l10n-id="pad.toolbar.checklist.title" title="Task list Checklist"><span class="icon-check"></span></a></li>';
@@ -38,13 +27,6 @@ exports.checklist = {
     }, 'checklist', true);
   },
 
-
-  /***
-  *
-  *  Toggle if some text is or aren't a task list
-  *
-  ***/
-
   doInsertchecklist: function(){
     var rep = this.rep;
     var documentAttributeManager = this.documentAttributeManager;
@@ -62,12 +44,6 @@ exports.checklist = {
   },
 
 
-  /***
-  *
-  *  Toggle a task as done/not done -- called by ace_inner.js
-  *
-  ***/
-
   doTogglechecklistItem: function(lineNumber){
     var rep = this.rep;
     var documentAttributeManager = this.documentAttributeManager;
@@ -82,12 +58,6 @@ exports.checklist = {
 
   },
 
-
-  /***
-  *
-  *  Is it a task list item and has the checklist been clicked?
-  *
-  ***/
 
   doUpdatechecklist: function(event){ // This is in the wrong context to access doc attr manager
     var ace = this;
@@ -104,13 +74,6 @@ exports.checklist = {
   }
 }
 
-
-/***
- * 
- *  Once ace is initialized, we bind the functions to the context
- * 
- ***/
-
 function aceInitialized(hook, context){
   var editorInfo = context.editorInfo;
   editorInfo.ace_doInsertchecklist = underscore(exports.checklist.doInsertchecklist).bind(context); // What does underscore do here?
@@ -119,11 +82,6 @@ function aceInitialized(hook, context){
 }
 
 
-/***
- * 
- *  Add the Javascript to Ace inner head, this is for the onClick listener
- * 
- ***/
 var aceDomLineProcessLineAttributes = function(name, context){
   if( context.cls.indexOf("checklist-not-done") !== -1) { var type="checklist-not-done"; }
   if( context.cls.indexOf("checklist-done") !== -1)     { var type="checklist-done";}
@@ -141,22 +99,9 @@ var aceDomLineProcessLineAttributes = function(name, context){
 };
 
 
-/***
- *
- * Turn attributes into classes
- *
- ***/
 exports.aceAttribsToClasses = function(hook, context){if(context.key == 'checklist-not-done' || context.key == 'checklist-done'){return [context.value];}}
-
-
-/***
- * 
- *  Export all the hooks
- * 
- ***/
 exports.aceInitialized = aceInitialized;
 exports.aceDomLineProcessLineAttributes = aceDomLineProcessLineAttributes;
-exports.aceEditorCSS = function(hook_name, cb){return ["/ep_checklist/static/css/checklist.css"];} // inner pad CSS
+exports.aceEditorCSS = function(hook_name, cb){return ["/md_checklist/static/css/checklist.css"];} // inner pad CSS
 exports.postAceInit = function(hook, context){exports.checklist.init(context);
-
 }
