@@ -1,1 +1,1 @@
-Checkbox plugin for MuDoc
+Checklist plugin for MuDoc

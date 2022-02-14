@@ -6,15 +6,15 @@
   "bundleDependencies": false,
   "contributors": [],
   "dependencies": {},
-  "description": "Checkbox  Plugin for Mudoc",
+  "description": "Checklist  Plugin for Mudoc",
   "engines": {
     "node": "*"
   },
-  "homepage": "https://github.com/akhil-naidu/md_checkbox#readme",
-  "name": "md_checkbox",
+  "homepage": "https://github.com/akhil-naidu/md_checklist#readme",
+  "name": "md_checklist",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/akhil-naidu/md_checkbox.git"
+    "url": "git+https://github.com/akhil-naidu/md_checklist.git"
   },
   "version": "0.0.1"
 }

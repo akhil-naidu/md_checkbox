@@ -1,20 +1,20 @@
 {
   "parts":[
     {
-      "name": "checkbox",
+      "name": "checklist",
       "client_hooks": {
-        "aceEditorCSS": "md_checkbox/static/js/checkbox",
-        "aceDomLineProcessLineAttributes": "md_checkbox/static/js/checkbox",
-        "postAceInit": "md_checkbox/static/js/checkbox",
-        "aceInitialized": "md_checkbox/static/js/checkbox",
-        "collectContentPre": "md_checkbox/static/js/shared",
-        "aceAttribsToClasses": "md_checkbox/static/js/checkbox"
+        "aceEditorCSS": "md_checklist/static/js/checklist",
+        "aceDomLineProcessLineAttributes": "md_checklist/static/js/checklist",
+        "postAceInit": "md_checklist/static/js/checklist",
+        "aceInitialized": "md_checklist/static/js/checklist",
+        "collectContentPre": "md_checklist/static/js/shared",
+        "aceAttribsToClasses": "md_checklist/static/js/checklist"
       },
       "hooks": {
-        "eejsBlock_scripts": "md_checkbox/checkbox",
-        "eejsBlock_styles": "md_checkbox/checkbox",
-        "collectContentPre": "md_checkbox/static/js/shared",
-        "collectContentPost": "md_checkbox/static/js/shared"
+        "eejsBlock_scripts": "md_checklist/checklist",
+        "eejsBlock_styles": "md_checklist/checklist",
+        "collectContentPre": "md_checklist/static/js/shared",
+        "collectContentPost": "md_checklist/static/js/shared"
       }
     }
   ]
