@@ -4,7 +4,7 @@
 
 $(document).ready(function () {
   $("body").mousedown(function (event) {
-    parent.parent.exports.checklist.doUpdatecheckbox(1);
+    parent.parent.exports.checklist.doUpdatechecklist(1);
   });
 });
 

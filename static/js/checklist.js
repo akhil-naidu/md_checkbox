@@ -27,14 +27,14 @@ exports.checklist = {
     $('#checklist').click(function(){ // apply attribtes when we click the editbar button
 
       context.ace.callWithAce(function(ace){ // call the function to apply the attribute inside ACE
-        ace.ace_doInsertcheckbox();
+        ace.ace_doInsertchecklist();
       }, 'checklist', true); // TODO what's the second attribute do here?
       padeditor.ace.focus();
 
     });
     context.ace.callWithAce(function(ace){
       var doc = ace.ace_getDocument();
-      $(doc).find('#innerdocbody').on("click", underscore(exports.checklist.doUpdatecheckbox).bind(ace));
+      $(doc).find('#innerdocbody').on("click", underscore(exports.checklist.doUpdatechecklist).bind(ace));
     }, 'checklist', true);
   },
 
@@ -45,15 +45,15 @@ exports.checklist = {
   *
   ***/
 
-  doInsertcheckbox: function(){
+  doInsertchecklist: function(){
     var rep = this.rep;
     var documentAttributeManager = this.documentAttributeManager;
     if (!(rep.selStart && rep.selEnd)){ return; } // only continue if we have some caret position
     var firstLine = rep.selStart[0]; // Get the first line
     var lastLine = Math.max(firstLine, rep.selEnd[0] - ((rep.selEnd[1] === 0) ? 1 : 0)); // Get the last line
     underscore(underscore.range(firstLine, lastLine + 1)).each(function(i){ // For each line, either turn on or off task list
-      var ischeckbox = documentAttributeManager.getAttributeOnLine(i, 'checklist-not-done');
-      if(!ischeckbox){ // if its already a checklist item
+      var ischecklist = documentAttributeManager.getAttributeOnLine(i, 'checklist-not-done');
+      if(!ischecklist){ // if its already a checklist item
         documentAttributeManager.setAttributeOnLine(i, 'checklist-not-done', 'checklist-not-done'); // make the line a task list
       }else{
         documentAttributeManager.removeAttributeOnLine(i, 'checklist-not-done'); // remove the task list from the line
@@ -68,7 +68,7 @@ exports.checklist = {
   *
   ***/
 
-  doTogglecheckboxItem: function(lineNumber){
+  doTogglechecklistItem: function(lineNumber){
     var rep = this.rep;
     var documentAttributeManager = this.documentAttributeManager;
     var isDone = documentAttributeManager.getAttributeOnLine(lineNumber, 'checklist-done');
@@ -89,17 +89,17 @@ exports.checklist = {
   *
   ***/
 
-  doUpdatecheckbox: function(event){ // This is in the wrong context to access doc attr manager
+  doUpdatechecklist: function(event){ // This is in the wrong context to access doc attr manager
     var ace = this;
     var target = event.target;
-    var ischeckbox = ($(target).hasClass("checklist-not-done") || $(target).hasClass("checklist-done"));
+    var ischecklist = ($(target).hasClass("checklist-not-done") || $(target).hasClass("checklist-done"));
     var parent = $(target).parent();
     var lineNumber = parent.prevAll().length;
     var targetRight = event.target.offsetLeft + 14; // The right hand side of the checklist -- remember the checklist can be indented
-    var isCheckbox = (event.pageX < targetRight); // was the click to the left of the checklist
-    if(!ischeckbox || !isCheckbox){ return; } // Dont continue if we're not clicking a checklist of a checklist
+    var isChecklist = (event.pageX < targetRight); // was the click to the left of the checklist
+    if(!ischecklist || !isChecklist){ return; } // Dont continue if we're not clicking a checklist of a checklist
     padEditor.callWithAce(function(ace){ // call the function to apply the attribute inside ACE
-      ace.ace_doTogglecheckboxItem(lineNumber);
+      ace.ace_doTogglechecklistItem(lineNumber);
     }, 'checklist', true); // TODO what's the second attribute do here?
   }
 }
@@ -113,8 +113,8 @@ exports.checklist = {
 
 function aceInitialized(hook, context){
   var editorInfo = context.editorInfo;
-  editorInfo.ace_doInsertcheckbox = underscore(exports.checklist.doInsertcheckbox).bind(context); // What does underscore do here?
-  editorInfo.ace_doTogglecheckboxItem = underscore(exports.checklist.doTogglecheckboxItem).bind(context); // TODO
+  editorInfo.ace_doInsertchecklist = underscore(exports.checklist.doInsertchecklist).bind(context); // What does underscore do here?
+  editorInfo.ace_doTogglechecklistItem = underscore(exports.checklist.doTogglechecklistItem).bind(context); // TODO
   padEditor = context.editorInfo.editor;
 }
 
@@ -156,7 +156,7 @@ exports.aceAttribsToClasses = function(hook, context){if(context.key == 'checkli
  ***/
 exports.aceInitialized = aceInitialized;
 exports.aceDomLineProcessLineAttributes = aceDomLineProcessLineAttributes;
-exports.aceEditorCSS = function(hook_name, cb){return ["/ep_checkbox/static/css/checklist.css"];} // inner pad CSS
+exports.aceEditorCSS = function(hook_name, cb){return ["/ep_checklist/static/css/checklist.css"];} // inner pad CSS
 exports.postAceInit = function(hook, context){exports.checklist.init(context);
 
 }
