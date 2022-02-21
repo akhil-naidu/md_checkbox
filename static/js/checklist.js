@@ -11,8 +11,8 @@ var padEditor;
 exports.checklist = {
 
   init: function(context){ // Write the button to the dom
-    var buttonHTML = '<li class="acl-write" id="checklist"><a class="grouped-middle" data-l10n-id="pad.toolbar.checklist.title" title="Task list Checklist"><span class="icon-check"></span></a></li>';
-    $(buttonHTML).insertAfter($('.icon-shuffle').parent().parent());
+    var buttonHTML = '<li class="acl-write" id="checklist"><a class="grouped-middle" data-l10n-id="pad.toolbar.checklist.title" title="Task list Checklist"><span class="buttonicon icon-check"></span></a></li>';
+    $(buttonHTML).insertBefore($('.buttonicon-indent').parent().parent());
     $('#checklist').click(function(){ // apply attribtes when we click the editbar button
 
       context.ace.callWithAce(function(ace){ // call the function to apply the attribute inside ACE
@@ -26,21 +26,53 @@ exports.checklist = {
       $(doc).find('#innerdocbody').on("click", underscore(exports.checklist.doUpdatechecklist).bind(ace));
     }, 'checklist', true);
   },
+  
 
   doInsertchecklist: function(){
+    
+    
+    lineHasMarker = function (line) {
+
+if(line.domInfo.node.className === "ace-line primary-null"||line.domInfo.node.className === "ace-line primary-none"){
+      $.gritter.add({ 
+            text: 'There is no content present to add checklist!',
+          });
+          return;
+    }else{
+
+      underscore(underscore.range(firstLine, lastLine + 1)).each(function(i){ // For each line, either turn on or off task list
+        var ischecklist = documentAttributeManager.getAttributeOnLine(i, 'checklist-not-done');
+        if(!ischecklist){ // if its already a checklist item
+          documentAttributeManager.setAttributeOnLine(i, 'checklist-not-done', 'checklist-not-done'); // make the line a task list
+          return;
+        }else{
+          documentAttributeManager.removeAttributeOnLine(i, 'checklist-not-done'); // remove the task list from the line
+          return;
+        }
+      });
+      return;
+    }
+      return line.lineMarker === 1;
+
+    };
+    
+    
+
+    
     var rep = this.rep;
+   
+
+    
     var documentAttributeManager = this.documentAttributeManager;
     if (!(rep.selStart && rep.selEnd)){ return; } // only continue if we have some caret position
     var firstLine = rep.selStart[0]; // Get the first line
     var lastLine = Math.max(firstLine, rep.selEnd[0] - ((rep.selEnd[1] === 0) ? 1 : 0)); // Get the last line
-    underscore(underscore.range(firstLine, lastLine + 1)).each(function(i){ // For each line, either turn on or off task list
-      var ischecklist = documentAttributeManager.getAttributeOnLine(i, 'checklist-not-done');
-      if(!ischecklist){ // if its already a checklist item
-        documentAttributeManager.setAttributeOnLine(i, 'checklist-not-done', 'checklist-not-done'); // make the line a task list
-      }else{
-        documentAttributeManager.removeAttributeOnLine(i, 'checklist-not-done'); // remove the task list from the line
-      }
-    });
+    console.log(lastLine)
+    const line = rep.lines.atIndex(lastLine);
+    lineHasMarker(line);
+    
+    
+    
   },
 
 
@@ -89,7 +121,7 @@ var aceDomLineProcessLineAttributes = function(name, context){
   if (tagIndex !== undefined && type){
     var tag = tags[tagIndex];
     var modifier = {
-      preHtml: '<li class="'+type+'"">',
+      preHtml: '<li class="'+type+'">',
       postHtml: '</li>',
       processedMarker: true
     };
